@@ -1,0 +1,28 @@
+spring:
+ application:
+   name: api-gateway
+ cloud:
+   gateway:
+     routes:
+       - id: user-service
+         uri: lb://user-service
+         predicates:
+           - Path=/user/**
+         filters:
+           - AuthenticationFilter
+
+       - id: ecom-service
+         uri: lb://ecom-service
+         predicates:
+           - Path=/ecom/**
+         filters:
+           - AuthenticationFilter
+  
+
+server:
+  port: 8088
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8085/eureka/

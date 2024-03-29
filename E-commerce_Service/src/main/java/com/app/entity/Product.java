@@ -1,0 +1,25 @@
+package com.app.entity;
+
+import java.math.BigDecimal;
+
+import javax.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "products")
+public class Product extends BaseEntity {
+	
+     private String ProductName;
+    
+     private BigDecimal price;
+     
+     private String description;
+     
+     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+     @JoinColumn(name = "category_id")
+     private Category category;
+}

@@ -1,0 +1,66 @@
+package com.app.service;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.app.dto.UserDto;
+import com.app.entity.Role;
+import com.app.entity.User;
+import com.app.repository.RoleRepository;
+import com.app.repository.UserRepository;
+
+@Service
+@Transactional
+public class UserService {
+	
+	@Autowired
+	UserRepository repository;
+	
+	@Autowired
+	public ModelMapper mapper;
+
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String registerUser(UserDto dto)
+	{  
+		if(repository.existsByUsername(dto.getUsername()))
+		{
+		   return "User already exist";
+		}
+		BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
+		String encodedPassword = bCryptPasswordEncoder.encode(dto.getPassword());
+		String rolename = dto.getRole().getRole_name();
+		User u = mapper.map(dto, User.class);
+		u.setPassword(encodedPassword);
+		repository.save(u);
+		String result = "Regiterd User :"+ rolename;
+		return result;
+	}
+	
+	public List<User> getAllUsers()
+	{
+		return repository.findAll();
+	}
+	
+	public User getById(Long id)
+	{
+		return repository.findById(id).get();	
+	}
+	
+	public User deleteById(Long id)
+	{
+		User u = repository.findById(id).get();
+		repository.delete(u);
+		return u;
+	}
+	
+	
+}

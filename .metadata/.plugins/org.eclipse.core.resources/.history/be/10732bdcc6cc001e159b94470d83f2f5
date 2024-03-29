@@ -1,0 +1,28 @@
+package com.app.entity;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Category extends BaseEntity {
+	
+	
+	private String type;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "category")  // orphanremval when category is deleted all the related products will be deleted first then category deleted
+	private List<Product> product_list;
+}

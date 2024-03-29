@@ -1,0 +1,25 @@
+package com.app.entity;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+
+import javax.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Cart extends BaseEntity {
+
+	@OneToOne
+	private User user;
+	
+	private BigDecimal totalPrice;
+	
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+	private List<CartItem> items;
+	
+}

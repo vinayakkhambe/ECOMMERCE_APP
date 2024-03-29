@@ -1,0 +1,30 @@
+package com.app.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+import com.app.dto.CartItemRequest;
+import com.app.entity.Cart;
+import com.app.repository.CartRepository;
+import com.app.repository.CustomerRepository;
+
+public class CartService {
+
+	@Autowired
+	CartRepository cartRepo;
+	
+	@Autowired
+	CustomerRepository custRepo;
+	
+	public void addToCart(CartItemRequest request , Long UserId)
+	{ 
+		Cart cart = new Cart();
+		Customer c = custRepo.findById(UserId).get();
+		cart.setCustomer();
+		
+   
+	}
+	
+}

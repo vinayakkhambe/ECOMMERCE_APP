@@ -1,0 +1,91 @@
+package com.app.service;
+
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.app.controller.tokendto;
+import com.app.dto.LoginRequestDto;
+import com.app.dto.LoginResponseDto;
+import com.app.dto.UserDto;
+import com.app.entity.User;
+import com.app.jwt.JwtAuthenticationHelper;
+import com.app.repository.UserRepository;
+
+
+@Service
+@Transactional
+public class AuthService {
+
+	@Autowired
+	AuthenticationManager manager;
+
+	@Autowired
+	JwtAuthenticationHelper jwtHelper;
+
+	@Autowired
+	UserDetailsService userDetailsService;
+	
+	@Autowired
+	UserRepository urepo;
+
+	public LoginResponseDto login(LoginRequestDto jwtRequest) 
+	{		
+		// authenticate with Authentication manager
+		this.doAuthenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+		
+		// just to add name in responsedto to build
+		User loggeduser = urepo.findByUsername(jwtRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Invalid User email !!!!!"));
+
+		UserDetails userDetails = userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+		String token = jwtHelper.generateToken(userDetails);
+
+		LoginResponseDto response = LoginResponseDto.builder().token(token)
+				                                                .Username(jwtRequest.getUsername())
+				                                                .name(loggeduser.getName())
+				                                               .build();
+		return response;
+	}
+
+	
+	public  void doAuthenticate(String username, String password) 
+	 { 
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+				password);
+		//Authentication verifiedCredentials;
+		try {
+			 manager.authenticate(authenticationToken);
+
+       		} catch (BadCredentialsException e) 
+		     {
+			    throw new BadCredentialsException("Invalid Username or Password");
+		     }	
+		
+		System.out.println("all fine");
+	  }
+
+	
+	
+	
+	public boolean validate(String token)
+	{
+		return jwtHelper.validateToken(token.getToken());
+	}	
+	
+	
+	
+	
+	
+}

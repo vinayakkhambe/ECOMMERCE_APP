@@ -1,0 +1,22 @@
+package com.app.dto;
+
+import java.math.BigDecimal;
+
+import com.app.entity.Category;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+public class ProductDto {
+	
+	 private Long id;
+	
+	 private String ProductName;
+	    
+     private BigDecimal price;
+     
+     private String description;
+     
+     private Category category;
+
+}

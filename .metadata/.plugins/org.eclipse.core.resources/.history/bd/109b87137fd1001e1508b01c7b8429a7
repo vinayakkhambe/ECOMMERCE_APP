@@ -1,0 +1,23 @@
+spring:
+ cloud:
+   gateway:
+     discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+     routes:
+       - id: ecom-service
+         uri: lb://ecom-service
+         predicates:
+           - Path=/ecom/**
+
+
+ application:
+   name: api-gateway
+          
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8085/eureka/
+     

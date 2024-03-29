@@ -1,0 +1,59 @@
+package com.app.controller;
+
+import java.util.Optional;
+
+import org.springframework.web.bind.annotation.*;
+
+
+
+@RestController
+@RequestMapping("/cart")
+public class CartController {
+	
+	@Autowired
+	private CartService cartService;
+	
+	@Autowired
+	private ProductService productService;
+	
+	@PostMapping("/add")
+	public ResponseEntity addToCart(@RequestBody CartItemRequest request, @RequestHeader("userId") Long userId)
+	{
+	 request.setUserId(userId);
+	 cartService.addToCart(request);
+		return ResponseEntity.ok().build();
+	}
+  
+	@GetMapping("/get")
+	public ResponseEntity<CartResponseDto> getCartItems(@RequestHeader("userId") Long userId)
+	{
+		CartResponseDto cartResponseDto = cartService.getCart(userId);
+		return ResponseEntity.ok(cartResponseDto);
+	}
+	
+	
+	@DeleteMapping("/delete/{cartItemId}")
+	public ResponseEntity deleteCartItem(@PathVariable Long cartItemId ,@RequestHeader("userId") Long userId)
+	{
+		cartService.deleteCartItem(cartItemId,userId);
+		return ResponseEntity.ok().build();
+	}
+	
+	
+	
+	@PutMapping("/update/{cartItemId}")
+	public ResponseEntity updateCartItem(@RequestBody @Valid CartItemRequest request )
+	{
+	   Optional<Product> optionalProduct = productService.getProduct(request.getProductId());
+	   
+	   if(optionalProduct.isEmpty())
+	   {
+		   return ResponseEntity.notFound().build();
+	   }
+	 
+	   cartService.updateCartItem(request,request.getUserId(),optionalProduct.get());
+	   
+	   return ResponseEntity.ok().build();
+	}
+
+}

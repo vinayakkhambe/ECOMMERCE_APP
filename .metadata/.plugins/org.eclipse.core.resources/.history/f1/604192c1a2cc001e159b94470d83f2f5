@@ -1,0 +1,15 @@
+package com.app.entity;
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+
+@Entity
+public class Category extends BaseEntity {
+	
+	private String type;
+
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+	private List<Product> product_list;
+}

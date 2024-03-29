@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="EurekaService"/>
+<aop-project name="User_Service"/>
+<aop-project name="MyGateway"/>
+<aop-project name="E-commerce_Service"/>
+</aop-reference-model>

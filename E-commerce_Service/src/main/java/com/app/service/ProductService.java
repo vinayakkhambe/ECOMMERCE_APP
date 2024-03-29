@@ -1,0 +1,93 @@
+package com.app.service;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.entity.Category;
+import com.app.entity.Product;
+import com.app.repository.CategoryRepository;
+import com.app.repository.ProductRepository;
+
+import javax.transaction.Transactional;
+
+@Service
+@Transactional
+public class ProductService {
+	
+	@Autowired
+	private ProductRepository productRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	
+	//create product
+ 	
+ 	public Product createProduct(Product product, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        product.setCategory(category);
+        return productRepository.save(product);
+    }
+	
+	
+	//retrive by id
+	
+	public Product getById(Long id)
+	{
+		Product p = productRepository.findById(id).get();
+		return p;
+	}
+	
+	
+	//retrive All
+	
+	public List<Product> getAllProducts()
+	{
+		List<Product> list = new ArrayList();
+		list = productRepository.findAll();
+		return list;
+	}
+	
+	//retrive All By category
+	
+	public List<Product> getAllProductsByCategory(String CategoryType)
+	{
+		List<Product> list = new ArrayList();
+		Category category = categoryRepository.findByType(CategoryType).get();	
+		list = productRepository.findByCategory(category).get();
+		return list;
+	}
+	
+	
+	
+	//Update product
+	
+	public Product updateProduct(Long id, Product updatedProduct) {
+		Optional<Product> existingProduct = productRepository.findById(id);
+		if (existingProduct.isPresent()) {
+		Product product = existingProduct.get();
+		product.setProductName(updatedProduct.getProductName());
+		product.setPrice(updatedProduct.getPrice());
+		product.setDescription(updatedProduct.getDescription());
+		product.setCategory(updatedProduct.getCategory());
+		return productRepository.save(product);
+		}
+		return null; // Handle the case when the product doesn't exist
+		}
+		
+	
+	//delete product
+		
+	public void deleteProduct(Long id) {
+		productRepository.deleteById(id);
+
+		}
+
+	
+}

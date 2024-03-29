@@ -1,0 +1,77 @@
+//package com.app.controller;
+//
+//import java.util.Optional;
+//
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.DeleteMapping;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.PutMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestHeader;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.web.service.annotation.PutExchange;
+//
+//import com.app.dto.CartItemRequest;
+//import com.app.dto.CartItemResponse;
+//import com.app.dto.CartResponseDto;
+//import com.app.entity.Product;
+//import com.app.service.CartService;
+//import com.app.service.ProductService;
+//
+//import jakarta.validation.Valid;
+//
+//@RestController
+//@RequestMapping("/cart")
+//public class CartController {
+//	
+//	@Autowired
+//	private CartService cartService;
+//	
+//	@Autowired
+//	private ProductService productService;
+//	
+//	@PostMapping("/add")
+//	public ResponseEntity addToCart(@RequestBody CartItemRequest request, @RequestHeader("userId") Long userId)
+//	{
+//	 request.setUserId(userId);
+//	 cartService.addToCart(request);
+//		return ResponseEntity.ok().build();
+//	}
+//  
+//	@GetMapping("/get")
+//	public ResponseEntity<CartResponseDto> getCartItems(@RequestHeader("userId") Long userId)
+//	{
+//		CartResponseDto cartResponseDto = cartService.getCart(userId);
+//		return ResponseEntity.ok(cartResponseDto);
+//	}
+//	
+//	
+//	@DeleteMapping("/delete/{cartItemId}")
+//	public ResponseEntity deleteCartItem(@PathVariable Long cartItemId ,@RequestHeader("userId") Long userId)
+//	{
+//		cartService.deleteCartItem(cartItemId,userId);
+//		return ResponseEntity.ok().build();
+//	}
+//	
+//	
+//	
+//	@PutMapping("/update/{cartItemId}")
+//	public ResponseEntity updateCartItem(@RequestBody @Valid CartItemRequest request )
+//	{
+//	   Optional<Product> optionalProduct = productService.getProduct(request.getProductId());
+//	   
+//	   if(optionalProduct.isEmpty())
+//	   {
+//		   return ResponseEntity.notFound().build();
+//	   }
+//	 
+//	   cartService.updateCartItem(request,request.getUserId(),optionalProduct.get());
+//	   
+//	   return ResponseEntity.ok().build();
+//	}
+//
+//}

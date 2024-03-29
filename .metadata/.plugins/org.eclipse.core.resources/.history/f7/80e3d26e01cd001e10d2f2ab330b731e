@@ -1,0 +1,7 @@
+package feignclient;
+
+//@FeignClient(name = "User", url = "http://localhost:8811/")
+//@feignclient()
+public interface UserClient {
+
+}

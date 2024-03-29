@@ -1,0 +1,36 @@
+package com.app.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.entity.Category;
+import com.app.entity.Product;
+import com.app.repository.CategoryRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class CategoryService {
+	
+	@Autowired
+	CategoryRepository repository;
+	
+	 public Category createCategory(Category category) {
+	        return repository.save(category);
+	    }
+
+	    public Category updateCategory(Long categoryId, Category updatedCategory) {
+	        Category category = repository.findById(categoryId)
+	            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+	        category.setName(updatedCategory.getName());
+	        // Update other fields as needed
+	        return repository.save(category);
+	    }
+
+	    public void deleteCategory(Long categoryId) {
+	    	repository.deleteById(categoryId);
+	    }
+}

@@ -1,0 +1,21 @@
+package com.app.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import com.app.dto.CartItemRequest;
+import com.app.entity.Cart;
+import com.app.repository.CartRepository;
+
+public class CartService {
+
+	@Autowired
+	CartRepository cartRepo;
+	
+	public void addToCart(CartItemRequest request)
+	{
+      Cart c = cartRepo.findById(request.getCartId()).orElseThrow(() -> new UsernameNotFoundException("Invalid User email !!!!!"));
+	   
+	}
+	
+}

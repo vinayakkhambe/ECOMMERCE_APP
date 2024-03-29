@@ -1,0 +1,30 @@
+package com.app.util;
+
+import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+
+
+
+@Component
+public class jwtutil
+{
+	private Key key;
+	
+	final private String SECRET = "thisisacodingninjasdemonstrationforsecretkeyinspringsecurityjsonwebtokenauthentication";
+	private static final long JWT_TOKEN_VALIDITY = 60*60;
+	
+
+	  public void validateToken(final String token) {
+	        Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
+	    }
+
+
+	    private Key getSignKey() {
+	        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+	        return Keys.hmacShaKeyFor(keyBytes);
+	    }
+}
+

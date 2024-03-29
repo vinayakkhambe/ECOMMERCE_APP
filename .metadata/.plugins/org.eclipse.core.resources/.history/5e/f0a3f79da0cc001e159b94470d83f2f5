@@ -1,0 +1,25 @@
+package com.app.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Customer {
+	
+	private String name;
+	
+	private String password;
+	
+	private String email;
+	
+	private String username;
+	
+	private String address;
+	
+
+
+}
